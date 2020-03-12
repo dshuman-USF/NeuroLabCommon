@@ -1,0 +1,277 @@
+2020-01-10  dshuman@usf.edu
+
+	* ogl_sb.c: When running apps using openGL over the network (like in x2go),
+	the get-a-framebuffer function fails. However, if you get a list of
+	available framebuffers and use the first one, it appears to work.
+
+2017-10-26  Dale Shuman  <dshuman@cisc1>
+
+	* xsbf.c: the len param was not used in gopen and gopen3d calls. Some of
+	the fortran callers were lucky that the title string was in memory that had
+	a zero in it. The fireworks program was not so lucky and giberish was
+	printed. The gravity_gui program needs the window title for the screen cap
+	function. Dup the code in the ogl_sb to use len.
+
+2017-10-18  Dale Shuman  <dshuman@cisc1>
+
+	* ogl_sb.c: 
+		clear_view_surface(...): Add in check for CLEAR_VIEWPORT. It now erases
+	   some stray pixels at the top of the screen when rotating some 3d plots.
+		gopen3d(...): Set size hints to not allow window resize. Sometimes users
+		resize windows and it erases everything, but there is no code to repaint
+		the window.  
+		I wonder what these changes may break. . .
+
+2016-05-31  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ogl_sb.c (write_png): change png_infopp_NULL to NULL due to
+	change in png API.  Fixes FTBFS.
+
+2014-07-02  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../jpcth/debian/postinst.template (new_version): add
+	--allow-unauthenticated to apt-get.  Fixes failure to get source.
+
+2014-06-10  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ps_starbase.c:
+	(maybe_stroke, ps_draw2d): If a color change comes in the middle
+	of a line, save the coordinates, do a 'stroke', then do a 'moveto'
+	to the saved coordinates before the next 'lineto'.  Fixes broken
+	.ps file on print or write.
+
+2014-03-27  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* postinst.template: added
+
+2014-02-15  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ps_starbase.c:
+	(maybe_stroke, setrgb, calc, ps_line_type, ps_draw2d)
+	(ps_rectangle, ps_move2d, ps_text2d, ps_append_text, ps_direct):
+	integrate pslinemerge.pl into the Postscript generation code, so
+	pslinemerge.pl is no longer necessary.
+
+2014-02-08  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../gravity/ogl_sb/ogl_sb.c (print_window, pfloat, pdbl): exit(1)
+	if asprint fails.  Quiets compiler warning.
+
+2013-03-16  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../autocth/gammln.f (GAMMLN): make conversion from real(8) to
+	real(4) explicit.  Silences compiler warning.
+
+2012-10-25  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ogl_sb.c (ellipse): set number of points to 100 instead of 400.
+	Works around bug in llvmpipe renderer.
+
+2012-08-09  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../gravity/ogl_sb/ogl_sb.c (polygon3d): cast the third argument
+	of gluTessCallback to _GLUfuncptr.  Silences compiler warning.
+
+2011-11-01  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../xanalysis/xsbf.c (sb_request_locator): delete unused variable
+	"cnt"
+
+2011-01-24  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../xanalysis/xsbf.c (line_color, text_color, perimeter_color)
+	(interior_style, fill_color):
+	* ../xanalysis/ps_starbase.h:
+	* ../xanalysis/ps_starbase.c:
+	(ps_color_set, ps_interior_style, ps_perimeter_color)
+	(ps_line_color, ps_text_color, ps_fill_color, setrgb, ps_draw2d)
+	(ps_rectangle, ps_text2d, ps_append_text):
+	Add color support.
+
+2011-01-04  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ogl_sb.c (ellipse): add ellipse routine for gravity
+
+2010-12-14  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../xassist/ps_starbase.c: delete debug printfs in ps_fopen
+
+2010-11-27  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../grav_04_final/ogl_sb/ogl_sb.c: add gopen = gopen3d
+
+2010-11-06  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../xanalysis/xsbf.c (is_print): add for xanalysis surrogate
+	control
+
+2010-09-21  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ogl_sb.h:
+	* ../spike/ogl_sb.c:
+	(write_png, print_window): add movie feature
+
+2010-09-02  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../spike/ogl_sb.c (get_click, make_picture_current, gopen3d)
+	(wait_for_input_and_handle_exposures): 	thread running
+	handle_exposures replaced with subroutine
+	wait_for_input_and_handle_exposures to be called before every read
+	from the terminal.
+
+2010-08-27  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ../spike/ogl_sb.c (print_window): disable debug printf.
+	(make_picture_current): work around opengl bug on some systems.
+	Fixes blank window.
+
+2010-05-27  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (sb_fill_color): use fill_gc, not line_gc for fill.
+	Fixes colors.
+
+2009-09-10  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (sb_line_width): use GCLineWidth, not GCForeground to
+	change the line width.  Fixes line_width call having no effect.
+
+	* xsbf.c (line_endpoint):
+	* sbparam.defs: add line endpoint parameters
+
+2009-08-26  Russell O'Connor  <roconnor@health.usf.edu>
+
+
+	* sbparam.h (ALL): added file for starbase parameters in C
+
+	* xsbf.c: change "int *fildes" to "long *fildes" everywhere it
+	wasn't already
+
+	* ps_starbase.c (ps_clip_indicator):
+	* ps_starbase.h:
+	* xsbf.c: add clip_indicator
+
+	* sbparam.defs: define CAM_*, THREE_D, CLIP_* for gravity
+
+2009-06-22  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* sbparam.defs: define TRUE and FALSE for gravity
+
+2009-06-11  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* rootsize.c (screensize): use the width of one monitor as the
+	screen size when there is one desktop spread over two monitors
+	and not just when each monitor is 4x3.  Fixes window spread
+	over two monitors  on cisc3.
+
+2008-09-10  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text): provide for fixed-width font when font_index = 1.
+
+2008-08-11  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text): trim the string after each piece, not just at the
+	end.  Fixes ends of strings not appearing on the screen in
+	xassist.
+
+2007-10-16  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ps_starbase.c (pss_die): change name from "die" so as not to
+	conflict with util.c
+
+2007-08-17  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text2d): add length argument for ps_text2d
+
+	* ps_starbase.c (ps_text2d): terminate fortran strings properly
+
+2007-06-29  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* miscellaneous_subroutines.f (remove_all_blanks): untabify
+
+2007-06-22  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (sb_gopen): add WM_DELETE_WINDOW to the WM_PROTOCOLS
+	property on the display, so the close button will send a message
+	to the client instead of killing it.
+	(sb_request_locator): report the WM_DELETE_WINDOW ClientMessage to
+	the caller.
+	(sb_request_locator): don't do "select" if there are events
+	pending.  Fixes the hang that required the "click a lot in a blank
+	area" workaround.
+
+2007-06-18  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (gopen): use the window title as the base name for the
+	postcript file when the "p" flag is set, istead of "CTH", and use
+	the passed in string length so a terminating null is not required.
+
+2007-06-07  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* rootsize.c: replace with a link to the common version
+
+	* miscellaneous_subroutines.f
+	(remove_all_blanks,remove_leading_blanks, upper_case, lower_case) 
+	(strlength): suppress unused variable warning for length
+	(validate_string): added since asta5-1.4.0
+
+2007-06-06  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text): adjust phys_[xy] for TA_RIGHT and TA_TOP before
+	calculating {min,max}[xy] rather than after.
+
+2007-06-05  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text, sb_text2d, sb_append_text, append_text, text2d):
+	don't rely on the string being null terminated - use the passed-in
+	string length.  Use memcpy instead of strcat.  Ignore spaces at
+	the end of the string.
+
+2007-05-21  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text): print the name of the font asked for and the font
+	set if SHOWFONTS is set in the environment.
+
+2007-05-02  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (sb_rectangle): fill rectangles to one pixel larger -
+	fixes xassist bar histogram
+
+2007-03-12  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c (text): use font ascent instead of string ascent for top
+	alignment
+	(sb_gopen): determine window width after mapping, instead of using
+	requested size.
+
+	* ps_starbase.h: add ps_text_orientation2d
+
+	* xsbf.c (text): handle top and right alignment for rotated text
+
+2007-03-09  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* ps_starbase.c (ps_text2d): add support for rotated text
+
+	* miscellaneous_subroutines.f: add left_justify
+
+	* ps_starbase.c (ps_text2d): handle top and right alignment
+
+	* ps_starbase.h: add ps_text_alignment
+
+	* ps_starbase.c: include ps_starbase.h
+	(ps_text_alignment): add
+
+	* xsbf.c (sb_gopen): initialize tax, tay
+	(text): handle top and right alignment
+	(text_alignment): add
+
+	* ps_starbase.h: add TA defines
+
+	* sbparam.defs: create.  Add TA params.
+
+2007-03-06  Russell O'Connor  <roconnor@health.usf.edu>
+
+	* xsbf.c: include ps_starbase.h, add dispatch functions used by
+	xanalysis
+
+	* miscellaneous_subroutines.f: remove extraneous ICHAR's
+
